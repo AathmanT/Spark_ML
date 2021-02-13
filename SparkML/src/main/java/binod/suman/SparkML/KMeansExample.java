@@ -39,6 +39,14 @@ public class KMeansExample {
 //        });
 //        parsedData.cache();
 
+        List<Vector> vlist = new ArrayList<Vector>();
+        for (int i=0;i<9;i++){
+            vlist.add(Vectors.dense(i));
+        }
+        System.out.println(Arrays.toString(vlist.toArray()));
+
+        JavaRDD<Vector> data = jsc.parallelize(vlist);
+
         double[] testData = new double[] { 1.0, 1.0, 9839.64, 170136.0, 160296.36, 0.0, 0.0};
         Vector newData = Vectors.dense(testData);
 
@@ -46,7 +54,7 @@ public class KMeansExample {
         List<Double> tdata = Arrays.asList(tData);
 
         // note that each Vector is a row and not a column
-        JavaRDD<Vector> data = jsc.parallelize(
+        JavaRDD<Vector> data1 = jsc.parallelize(
                 Arrays.asList(
                         Vectors.dense(1.0),
                         Vectors.dense(20.0),
@@ -93,7 +101,7 @@ public class KMeansExample {
         List<Double> filtered = matchingIndices.stream()
                 .map(tdata::get)
                 .collect(Collectors.toList());
-        
+
         System.out.println(Arrays.toString(filtered.toArray()));
 
         double cost = kMeansModel.computeCost(data.rdd());
